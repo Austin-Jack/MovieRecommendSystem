@@ -1,6 +1,7 @@
 package cn.llynsyw.movie.recommender.dataloader
 
 import cn.llynsyw.movie.recommender.commons.model._
+import cn.llynsyw.movie.recommender.commons.constant.Constant._
 import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.{MongoClient, MongoClientURI, MongoDB}
 import org.apache.spark.SparkConf
@@ -20,14 +21,11 @@ object DataLoader {
 
   // 定义常量
 
+  //数据集前缀
+  val DATASET_PATH_PREFIX = ""
   val MOVIE_DATA_PATH = "recommender/DataLoader/src/main/resources/movies.csv"
   val RATING_DATA_PATH = "recommender/DataLoader/src/main/resources/ratings.csv"
   val TAG_DATA_PATH = "recommender/DataLoader/src/main/resources/tags.csv"
-
-  val MONGODB_MOVIE_COLLECTION = "Movie"
-  val MONGODB_RATING_COLLECTION = "Rating"
-  val MONGODB_TAG_COLLECTION = "Tag"
-  val ES_MOVIE_INDEX = "Movie"
 
   def main(args: Array[String]): Unit = {
 
@@ -107,38 +105,38 @@ object DataLoader {
 
     // 如果mongodb中已经有相应的数据库，先删除
     val db: MongoDB = mongoClient(mongoConfig.db)
-    db(MONGODB_MOVIE_COLLECTION).dropCollection()
-    db(MONGODB_RATING_COLLECTION).dropCollection()
-    db(MONGODB_TAG_COLLECTION).dropCollection()
+    db(MONGODB_MOVIE_COLLECTION_NAME).dropCollection()
+    db(MONGODB_RATING_COLLECTION_NAME).dropCollection()
+    db(MONGODB_TAG_COLLECTION_NAME).dropCollection()
 
     // 将DF数据写入对应的mongodb表中
     movieDF.write
       .option("uri", mongoConfig.uri)
-      .option("collection", MONGODB_MOVIE_COLLECTION)
+      .option("collection", MONGODB_MOVIE_COLLECTION_NAME)
       .mode("overwrite")
       .format("com.mongodb.spark.sql")
       .save()
 
     ratingDF.write
       .option("uri", mongoConfig.uri)
-      .option("collection", MONGODB_RATING_COLLECTION)
+      .option("collection", MONGODB_RATING_COLLECTION_NAME)
       .mode("overwrite")
       .format("com.mongodb.spark.sql")
       .save()
 
     tagDF.write
       .option("uri", mongoConfig.uri)
-      .option("collection", MONGODB_TAG_COLLECTION)
+      .option("collection", MONGODB_TAG_COLLECTION_NAME)
       .mode("overwrite")
       .format("com.mongodb.spark.sql")
       .save()
 
     //对数据表建索引
-    db(MONGODB_MOVIE_COLLECTION).createIndex(MongoDBObject("mid" -> 1))
-    db(MONGODB_RATING_COLLECTION).createIndex(MongoDBObject("uid" -> 1))
-    db(MONGODB_RATING_COLLECTION).createIndex(MongoDBObject("mid" -> 1))
-    db(MONGODB_TAG_COLLECTION).createIndex(MongoDBObject("uid" -> 1))
-    db(MONGODB_TAG_COLLECTION).createIndex(MongoDBObject("mid" -> 1))
+    db(MONGODB_MOVIE_COLLECTION_NAME).createIndex(MongoDBObject("mid" -> 1))
+    db(MONGODB_RATING_COLLECTION_NAME).createIndex(MongoDBObject("uid" -> 1))
+    db(MONGODB_RATING_COLLECTION_NAME).createIndex(MongoDBObject("mid" -> 1))
+    db(MONGODB_TAG_COLLECTION_NAME).createIndex(MongoDBObject("uid" -> 1))
+    db(MONGODB_TAG_COLLECTION_NAME).createIndex(MongoDBObject("mid" -> 1))
 
     mongoClient.close()
 
@@ -174,7 +172,7 @@ object DataLoader {
       .option("es.mapping.id", "mid")
       .mode("overwrite")
       .format("org.elasticsearch.spark.sql")
-      .save(eSConfig.index + "/" + ES_MOVIE_INDEX)
+      .save(eSConfig.index + "/" + ES_MOVIE_TYPE_NAME)
   }
 
 }
