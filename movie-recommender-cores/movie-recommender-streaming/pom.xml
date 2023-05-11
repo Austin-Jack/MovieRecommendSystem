@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>recommender</artifactId>
+        <artifactId>movie-recommender-cores</artifactId>
         <groupId>com.atguigu</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>DataLoader</artifactId>
+    <artifactId>StreamingRecommender</artifactId>
     <dependencies>
         <!-- Spark的依赖引入 -->
         <dependency>
@@ -20,40 +20,54 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.11</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.11</artifactId>
+        </dependency>
         <!-- 引入Scala -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
+
         <!-- 加入MongoDB的驱动 -->
+        <!-- 用于代码方式连接MongoDB -->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>casbah-core_2.11</artifactId>
             <version>${casbah.version}</version>
         </dependency>
+        <!-- 用于Spark和MongoDB的对接 -->
         <dependency>
             <groupId>org.mongodb.spark</groupId>
             <artifactId>mongo-spark-connector_2.11</artifactId>
             <version>${mongodb-spark.version}</version>
         </dependency>
-        <!-- 加入ElasticSearch的驱动 -->
+
+        <!-- redis -->
         <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>transport</artifactId>
-            <version>${elasticsearch.version}</version>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
+        <!-- kafka -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>0.10.2.1</version>
         </dependency>
         <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch-spark-20_2.11</artifactId>
-            <version>${elasticsearch-spark.version}</version>
-            <!-- 将不需要依赖的包从依赖路径中除去 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.hive</groupId>
-                    <artifactId>hive-service</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>0.10.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

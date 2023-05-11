@@ -9,22 +9,20 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>recommender</artifactId>
+    <artifactId>movie-recommender-cores</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>DataLoader</module>
-        <module>StatisticsRecommender</module>
-        <module>OfflineRecommender</module>
-        <module>StreamingRecommender</module>
-        <module>ContentRecommender</module>
-        <module>KafkaStream</module>
-
+        <module>movie-recommender-dataloader</module>
+        <module>movie-recommender-statistics</module>
+        <module>movie-recommender-offline</module>
+        <module>movie-recommender-streaming</module>
+        <module>movie-recommender-content-based</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.atguigu</groupId>
-            <artifactId>coreModel</artifactId>
+            <artifactId>movie-recommender-commons</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
