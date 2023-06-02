@@ -1,6 +1,7 @@
 package cn.llynsyw.movie.recommender.offline
 
 import cn.llynsyw.movie.recommender.commons.model._
+import cn.llynsyw.movie.recommender.commons.utils.Compute
 import org.apache.spark.SparkConf
 import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
 import org.apache.spark.rdd.RDD
@@ -53,7 +54,7 @@ object OfflineRecommender {
     val trainData: RDD[Rating] = ratingRDD.map(x => Rating(x._1, x._2, x._3))
 
     val (rank, iterations, lambda) = (200, 5, 0.1)
-    val model: MatrixFactorizationModel = ALS.train(trainData, rank, iterations, lambda)
+    val model: MatrixFactorizationModel = Compute.alsTrain(trainData, rank, iterations, lambda)
 
     // 基于用户和电影的隐特征，计算预测评分，得到用户的推荐列表
     // 计算user和movie的笛卡尔积，得到一个空评分矩阵
@@ -67,7 +68,9 @@ object OfflineRecommender {
       .map(rating => (rating.user, (rating.product, rating.rating)))
       .groupByKey()
       .map {
-        case (uid, recs) => UserRecs(uid, recs.toList.sortWith(_._2 > _._2).take(USER_MAX_RECOMMENDATION).map(x => Recommendation(x._1, x._2)))
+        case (uid, recs) => UserRecs(uid, recs.toList.sortWith(_._2 > _._2)
+          .take(USER_MAX_RECOMMENDATION)
+          .map(x => Recommendation(x._1, x._2)))
       }
       .toDF()
 
@@ -84,21 +87,23 @@ object OfflineRecommender {
     }
 
     // 对所有电影两两计算它们的相似度，先做笛卡尔积
-    val movieRecs: DataFrame = movieFeatures.cartesian(movieFeatures)
+    val movieRecs: DataFrame = movieFeatures
+      .cartesian(movieFeatures)
       .filter {
         // 把自己跟自己的配对过滤掉
         case (a, b) => a._1 != b._1
       }
       .map {
-        case (a, b) => {
-          val simScore: Double = this.consinSim(a._2, b._2)
+        case (a, b) =>
+          val simScore: Double = Compute.getCosineSim(a._2, b._2)
           (a._1, (b._1, simScore))
-        }
       }
-      .filter(_._2._2 > 0.6) // 过滤出相似度大于0.6的
+      .filter(_._2._2 > 0.6) // 保留相似度大于0.6的项
       .groupByKey()
       .map {
-        case (mid, items) => MovieRecs(mid, items.toList.sortWith(_._2 > _._2).map(x => Recommendation(x._1, x._2)))
+        case (mid, items) =>
+          MovieRecs(mid, items.toList.sortWith(_._2 > _._2)
+            .map(x => Recommendation(x._1, x._2)))
       }
       .toDF()
     movieRecs.write
@@ -110,10 +115,4 @@ object OfflineRecommender {
 
     spark.stop()
   }
-
-  // 求向量余弦相似度
-  def consinSim(movie1: DoubleMatrix, movie2: DoubleMatrix): Double = {
-    movie1.dot(movie2) / (movie1.norm2() * movie2.norm2())
-  }
-
 }

@@ -19,4 +19,7 @@ public class Constant {
      * elasticsearch 索引名称
      */
     public static final String ES_MOVIE_TYPE_NAME = "Movie";
+
+    public static final String CONFIG_KEY_FOR_DATASET_PATH_PREFIX = "dataset.path.prefix";
+    public static final String CONFIG_KEY_FOR_ES_TRANSPORT_HOSTS = "es.transportHosts";
 }

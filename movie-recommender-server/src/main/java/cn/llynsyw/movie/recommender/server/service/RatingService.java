@@ -111,7 +111,7 @@ public class RatingService {
         for (Document document : documents) {
             Rating rating = documentToRating(document);
             Long index = Math.round(rating.getScore() / 0.5);
-            stats[index.intValue()] = stats[index.intValue()] + 1;
+            stats[index.intValue() - 1] = stats[index.intValue() - 1] + 1;
         }
         return stats;
     }

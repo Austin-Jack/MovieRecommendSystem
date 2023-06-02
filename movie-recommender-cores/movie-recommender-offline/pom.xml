@@ -12,11 +12,7 @@
     <artifactId>movie-recommender-offline</artifactId>
     <dependencies>
 
-        <dependency>
-            <groupId>org.scalanlp</groupId>
-            <artifactId>jblas</artifactId>
-            <version>${jblas.version}</version>
-        </dependency>
+
 
         <!-- Spark的依赖引入 -->
         <dependency>
@@ -27,11 +23,6 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.11</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-mllib_2.11</artifactId>
-        </dependency>
-
         <!-- 引入Scala -->
         <dependency>
             <groupId>org.scala-lang</groupId>

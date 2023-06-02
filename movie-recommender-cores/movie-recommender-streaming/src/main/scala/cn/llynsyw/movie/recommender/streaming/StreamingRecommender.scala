@@ -7,7 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.streaming.dstream.InputDStream
+import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -77,9 +77,9 @@ object StreamingRecommender {
     )
 
     // 把原始数据UID|MID|SCORE|TIMESTAMP 转换成评分流
-    val ratingStream = kafkaStream.map {
+    val ratingStream: DStream[(Int, Int, Double, Int)] = kafkaStream.map {
       msg =>
-        val attr = msg.value().split("\\|")
+        val attr: Array[String] = msg.value().split("\\|")
         (attr(0).toInt, attr(1).toInt, attr(2).toDouble, attr(3).toInt)
     }
 

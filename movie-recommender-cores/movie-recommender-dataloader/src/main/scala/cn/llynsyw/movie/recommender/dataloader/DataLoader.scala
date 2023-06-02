@@ -22,7 +22,6 @@ object DataLoader {
   // 定义常量
 
   //数据集前缀
-  val DATASET_PATH_PREFIX = ""
   val MOVIE_DATA_PATH = "recommender/DataLoader/src/main/resources/movies.csv"
   val RATING_DATA_PATH = "recommender/DataLoader/src/main/resources/ratings.csv"
   val TAG_DATA_PATH = "recommender/DataLoader/src/main/resources/tags.csv"
