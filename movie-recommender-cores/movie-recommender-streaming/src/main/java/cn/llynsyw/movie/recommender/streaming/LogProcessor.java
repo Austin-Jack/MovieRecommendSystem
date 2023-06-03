@@ -47,8 +47,8 @@ public class LogProcessor implements Processor<byte[], byte[]> {
     }
 
     public void startProcess() {
-        String brokers = "linux:9092";
-        String zookeepers = "linux:2181";
+        String brokers = "localhost:9092";
+        String zookeepers = "localhost:2181";
 
         // 输入和输出的topic
         String from = "log";

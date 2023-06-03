@@ -25,7 +25,7 @@ public class Application {
 
         Settings settings = Settings.builder().put("cluster.name", "es-cluster").build();
         TransportClient esClient = new PreBuiltTransportClient(settings);
-        esClient.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("linux"), 9300));
+        esClient.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300));
 
         GetResponse getResponse = esClient.prepareGet(Constant.ES_INDEX, Constant.ES_MOVIE_TYPE, "3062").get();
 
