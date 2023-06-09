@@ -50,7 +50,7 @@ object ALSTrainer {
   def adjustALSParam(trainData: RDD[Rating], testDataset: RDD[Rating]): Unit = {
     val result: Array[(Int, Double, Double)] = for (rank <- Array(50, 100, 200, 300); lambda <- Array(0.01, 0.1, 1))
       yield {
-        val model: MatrixFactorizationModel = Compute.alsTrain(trainData, rank, 10, lambda)
+        val model: MatrixFactorizationModel = Compute.alsTrain(trainData, rank, 5, lambda)
         // 计算当前参数对应模型的RMSE，返回Double
         val rmse: Double = Compute.getRMSE(model, testDataset)
         val mae: Double = Compute.getMAE(model, testDataset)

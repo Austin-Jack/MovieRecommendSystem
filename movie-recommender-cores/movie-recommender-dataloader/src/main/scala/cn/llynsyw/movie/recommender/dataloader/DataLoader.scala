@@ -22,9 +22,9 @@ object DataLoader {
   // 定义常量
 
   //数据集前缀
-  val MOVIE_DATA_PATH = "recommender/DataLoader/src/main/resources/movies.csv"
-  val RATING_DATA_PATH = "recommender/DataLoader/src/main/resources/ratings.csv"
-  val TAG_DATA_PATH = "recommender/DataLoader/src/main/resources/tags.csv"
+  val MOVIE_DATA_PATH = "/Users/luolinyuan/Desktop/recommender-environment/dataset/small/movies.csv"
+  val RATING_DATA_PATH = "/Users/luolinyuan/Desktop/recommender-environment/dataset/small/ratings.csv"
+  val TAG_DATA_PATH = "/Users/luolinyuan/Desktop/recommender-environment/dataset/small/tags.csv"
 
   def main(args: Array[String]): Unit = {
 
